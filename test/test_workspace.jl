@@ -344,3 +344,15 @@ end
     @test eltype(w4) <: Pair{Symbol, <:TSeries}
 
 end
+
+@testset "TOML.print(Workspace)" begin
+    TOML = TimeSeriesEcon.TOML
+    w = Workspace(a=1, b="x", c=Workspace(d=2.0))
+    expected = Dict("a" => 1, "b" => "x", "c" => Dict("d" => 2.0))
+    @test TOML.parse(sprint(io -> TOML.print(io, w))) == expected
+    @test TOML.parse(sprint(io -> TOML.print(io, w; sorted=true))) == expected
+    # with a conversion function for values TOML cannot represent
+    w2 = Workspace(a=1, s=:hello)
+    @test TOML.parse(sprint(io -> TOML.print(string, io, w2))) == Dict("a" => 1, "s" => "hello")
+    @test TOML.parse(sprint(io -> TOML.print(string, io, w2; sorted=true))) == Dict("a" => 1, "s" => "hello")
+end

@@ -421,6 +421,12 @@ function Base.setproperty!(x::MVTSeries, name::Symbol, val)
         rng = intersect(rangeof(col), rangeof(vcol))
         return copyto!(col, rng, vcol)
     else
+        # Check the length explicitly. Julia 1.12 and 1.13.0-1.13.2 skip the shape
+        # check when assigning into a view, unless run with --check-bounds=yes
+        # (fixed upstream in JuliaLang/julia#63428).
+        if val isa AbstractArray && length(val) != length(col.values)
+            throw(DimensionMismatch("cannot assign $(length(val)) values to column $name of length $(length(col.values))"))
+        end
         return col.values[:] = val
     end
 end

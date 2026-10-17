@@ -336,6 +336,8 @@ TOML.print(w::Workspace; sorted::Bool=false, by=identity) = TOML.print(_w, w._c;
 TOML.print(io::IO, w::Workspace; sorted::Bool=false, by=identity) = TOML.print(_w, io, w._c; sorted, by)
 TOML.print(f::Function, io::IO, w::Workspace; sorted::Bool=false, by=identity) = TOML.print(f ∘ _w, io, w._c; sorted, by)
 TOML.print(f::Function, w::Workspace; sorted::Bool=false, by=identity) = TOML.print(f ∘ _w, w._c; sorted, by)
+TOML.print(::Nothing, io::IO, w::Workspace; sorted::Bool=false, by=identity) = TOML.print(io, w; sorted, by)
+TOML.print(::Nothing, w::Workspace; sorted::Bool=false, by=identity) = TOML.print(w; sorted, by)
 
 
 ## isyearly, isquarterly, isweekly, ismonthly

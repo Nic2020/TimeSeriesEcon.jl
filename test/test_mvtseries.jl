@@ -183,6 +183,12 @@ end
         @test_throws DimensionMismatch sd.a[:] = ones(length(sd.a) + 5)
         @test_throws DimensionMismatch sd.a = ones(length(sd.a) + 5)
         @test_throws DimensionMismatch sd.a = ones(length(sd.a) - 1)
+        @test_throws DimensionMismatch sd.a = 1.0:(length(sd.a)+1)
+        # strided (non-contiguous) column storage
+        sds = MVTSeries(2020Q1, (:a, :b), view(zeros(8, 2), 1:2:8, :))
+        @test_throws DimensionMismatch sds.a = ones(5)
+        sds.a = 1.0:4.0
+        @test sds.a.values == 1.0:4.0
         # access to rows by MIT
         sd[:] = dta[:]
         @test sd[2000Q1] isa Vector{Float64}

@@ -355,4 +355,15 @@ end
     w2 = Workspace(a=1, s=:hello)
     @test TOML.parse(sprint(io -> TOML.print(string, io, w2))) == Dict("a" => 1, "s" => "hello")
     @test TOML.parse(sprint(io -> TOML.print(string, io, w2; sorted=true))) == Dict("a" => 1, "s" => "hello")
+    # an explicit `nothing` conversion function means "no conversion"
+    @test TOML.parse(sprint(io -> TOML.print(nothing, io, w))) == expected
+    # the forms without `io` print to stdout
+    capture(f) = mktemp() do path, io
+        redirect_stdout(f, io)
+        flush(io)
+        read(path, String)
+    end
+    @test TOML.parse(capture(() -> TOML.print(w))) == expected
+    @test TOML.parse(capture(() -> TOML.print(nothing, w))) == expected
+    @test TOML.parse(capture(() -> TOML.print(string, w2))) == Dict("a" => 1, "s" => "hello")
 end

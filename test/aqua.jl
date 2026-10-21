@@ -10,9 +10,5 @@ using Aqua
         ambiguities=(broken=true,),
         # TODO: type parameters in the fconvert signatures that are unbound for some frequencies
         unbound_args=(broken=true,),
-        # TODO: DataEcon exports search_catalog, which is not defined
-        undefined_exports=(broken=true,),
-        # TODO: Suppressor is used only in the tests
-        stale_deps=(ignore=[:Suppressor],),
     )
 end

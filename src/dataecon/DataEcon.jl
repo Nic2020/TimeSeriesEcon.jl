@@ -9,7 +9,7 @@ export DEError
 export DEFile, opendaec, opendaecmem, closedaec!, truncatedaec
 export root_id, find_fullpath, find_object, delete_object
 export get_attribute, set_attribute, get_all_attributes, get_fullpath
-export new_catalog, list_catalog, search_catalog, catalog_size
+export new_catalog, list_catalog, catalog_size
 export store_scalar, load_scalar
 export store_tseries, load_tseries
 export store_mvtseries, load_mvtseries

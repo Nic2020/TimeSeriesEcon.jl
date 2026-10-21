@@ -3,7 +3,7 @@
 
 module DataEcon
 
-using Dates
+using Dates: Dates
 
 export DEError
 export DEFile, opendaec, opendaecmem, closedaec!, truncatedaec
@@ -18,7 +18,7 @@ export writedb, write_data
 export readdb, read_data
 
 using ..TimeSeriesEcon
-using ..MacroTools
+using ..MacroTools: MacroTools
 
 include("C.jl")
 

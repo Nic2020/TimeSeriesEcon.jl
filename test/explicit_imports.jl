@@ -6,8 +6,6 @@ using ExplicitImports
 
 @testset "ExplicitImports" begin
     test_explicit_imports(TimeSeriesEcon;
-        # TODO: names used through `using X` without being listed
-        no_implicit_imports=false,
         # written X13.name inside X13 on purpose (e.g. X13.run is not Base.run)
         no_self_qualified_accesses=(ignore=(
             :Span, :X13result, :ao, :aos, :easter, :easterstock, :labor, :loadresult, :lom, :loq, :lpyear, :ls,

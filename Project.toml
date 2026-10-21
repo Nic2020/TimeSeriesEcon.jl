@@ -20,10 +20,12 @@ TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 X13as_jll = "6c9beba9-e00a-580e-a2fe-633c5dfe81b1"
 
 [compat]
+Aqua = "0.8"
 CEnum = "0.4"
 DataEcon_jll = "0.4"
 Dates = "1.7"
 Distributed = "1.7"
+ExplicitImports = "1.15"
 LinearAlgebra = "1.7"
 MacroTools = "0.5"
 OrderedCollections = "1.4"
@@ -38,7 +40,9 @@ X13as_jll = "1.1.60"
 julia = "1.10"
 
 [extras]
+Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
+ExplicitImports = "7d51a73a-1435-4ff3-83d9-f097790105c7"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["Test"]
+test = ["Aqua", "ExplicitImports", "Test"]

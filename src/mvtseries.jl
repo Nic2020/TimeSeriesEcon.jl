@@ -144,7 +144,7 @@ function cleanedvalues(mvts::MVTSeries{BDaily}; skip_all_nans::Bool=false, skip_
         end
         return mvts.values[valid_rows_matrix[:, 2], :]
     elseif skip_holidays
-        h_map = TimeSeriesEcon.getoption(:bdaily_holidays_map)
+        h_map = getoption(:bdaily_holidays_map)
         if !(h_map isa TSeries{BDaily})
             throw(ArgumentError("The holidays map stored in :bdaily_holidays_map is not a TSeries it is a $(typeof(h_map)). \n You may need to load one with TimeSeriesEcon.set_holidays_map()."))
         end

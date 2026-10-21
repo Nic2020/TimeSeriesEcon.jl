@@ -418,9 +418,9 @@ end
 function clean_old_frequencies!(ws::Workspace)
     for (key, val) in ws
         if val isa Workspace
-            TimeSeriesEcon.clean_old_frequencies!(val)
+            clean_old_frequencies!(val)
         else
-            ws[key] = TimeSeriesEcon.clean_old_frequencies(val)
+            ws[key] = clean_old_frequencies(val)
         end
     end
 end

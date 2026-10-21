@@ -39,7 +39,7 @@ using Statistics
 using Serialization
 using Distributed
 import Dates
-import Dates: Date, Month, Quarter, Year, Week, Day, dayofweek, dayofmonth, dayofyear, dayofquarter, dayname, week
+import Dates: Date, Month, Day, dayofweek, dayofyear, dayname, week
 using TOML
 
 include("options.jl")

@@ -780,8 +780,8 @@ Base.flipsign(x::Duration{F}, y::Duration{F}) where {F<:Frequency} = flipsign(In
 Base.flipsign(x::MIT{F}, y::MIT{F}) where {F<:Frequency} = flipsign(Int(x), Int(y))
 
 # needed for plot math
-Base.:(/)(a::Duration, b::Duration) = TimeSeriesEcon.mixed_freq_error(a, b)
-Base.:(/)(a::MIT, b::Duration) = TimeSeriesEcon.mixed_freq_error(a, b)
+Base.:(/)(a::Duration, b::Duration) = mixed_freq_error(a, b)
+Base.:(/)(a::MIT, b::Duration) = mixed_freq_error(a, b)
 Base.:(/)(a::Duration{F}, b::Duration{F}) where {F<:Frequency} = Int(a) / Int(b)
 Base.:(/)(a::MIT{F}, b::Duration{F}) where {F<:Frequency} = (a - MIT{F}(0)) / b
 Base.promote_rule(::Type{<:Duration}, ::Type{T}) where {T<:AbstractFloat} = T

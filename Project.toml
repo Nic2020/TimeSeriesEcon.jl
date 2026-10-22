@@ -19,7 +19,7 @@ TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 X13as_jll = "6c9beba9-e00a-580e-a2fe-633c5dfe81b1"
 
 [compat]
-Aqua = "0.8"
+Aqua = "0.8.18"
 CEnum = "0.4"
 DataEcon_jll = "0.4"
 Dates = "1.7"

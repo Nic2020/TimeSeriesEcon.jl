@@ -330,12 +330,20 @@ function reindex(w::Workspace, pair::Pair{<:MIT,<:MIT}; copy=false)
 end
 
 ###########################
+# TOML has no type for MITs, and its printer writes an MIT as an integer (`MIT <: Signed`)
+# without calling the conversion function, which gives invalid TOML (`m = 2020Q1`). So
+# MITs are written as strings: "2020Q1", and a range "2020Q1:2020Q4". Reading the file
+# back gives these strings.
+_toml(a) = a
+_toml(m::MIT) = string(m)
+_toml(r::AbstractUnitRange{<:MIT}) = string(r)
+_toml(v::AbstractVector{<:MIT}) = string.(v)
 _w(a) = a
-_w(w::Workspace) = w._c
-TOML.print(w::Workspace; sorted::Bool=false, by=identity) = TOML.print(_w, w._c; sorted, by)
-TOML.print(io::IO, w::Workspace; sorted::Bool=false, by=identity) = TOML.print(_w, io, w._c; sorted, by)
-TOML.print(f::Function, io::IO, w::Workspace; sorted::Bool=false, by=identity) = TOML.print(f ∘ _w, io, w._c; sorted, by)
-TOML.print(f::Function, w::Workspace; sorted::Bool=false, by=identity) = TOML.print(f ∘ _w, w._c; sorted, by)
+_w(w::Workspace) = OrderedDict{Symbol,Any}(k => _toml(v) for (k, v) in w._c)
+TOML.print(w::Workspace; sorted::Bool=false, by=identity) = TOML.print(_w, _w(w); sorted, by)
+TOML.print(io::IO, w::Workspace; sorted::Bool=false, by=identity) = TOML.print(_w, io, _w(w); sorted, by)
+TOML.print(f::Function, io::IO, w::Workspace; sorted::Bool=false, by=identity) = TOML.print(f ∘ _w, io, _w(w); sorted, by)
+TOML.print(f::Function, w::Workspace; sorted::Bool=false, by=identity) = TOML.print(f ∘ _w, _w(w); sorted, by)
 TOML.print(::Nothing, io::IO, w::Workspace; sorted::Bool=false, by=identity) = TOML.print(io, w; sorted, by)
 TOML.print(::Nothing, w::Workspace; sorted::Bool=false, by=identity) = TOML.print(w; sorted, by)
 

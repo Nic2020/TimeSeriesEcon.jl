@@ -366,4 +366,11 @@ end
     @test TOML.parse(capture(() -> TOML.print(w))) == expected
     @test TOML.parse(capture(() -> TOML.print(nothing, w))) == expected
     @test TOML.parse(capture(() -> TOML.print(string, w2))) == Dict("a" => 1, "s" => "hello")
+    # MITs are written as strings (TOML has no type for them), also in nested workspaces
+    w3 = Workspace(m=2020Q1, r=2020Q1:2020Q4, v=[2020M1, 2021M1], d=2020Q4 - 2020Q1, n=Workspace(u=5U))
+    expected3 = Dict("m" => "2020Q1", "r" => "2020Q1:2020Q4", "v" => ["2020M1", "2021M1"], "d" => 3,
+        "n" => Dict("u" => "5U"))
+    @test TOML.parse(sprint(io -> TOML.print(io, w3))) == expected3
+    w4 = Workspace(m=2020Q1, s=:hello)
+    @test TOML.parse(sprint(io -> TOML.print(string, io, w4; sorted=true))) == Dict("m" => "2020Q1", "s" => "hello")
 end

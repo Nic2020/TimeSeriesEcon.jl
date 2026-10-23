@@ -371,6 +371,13 @@ end
     expected3 = Dict("m" => "2020Q1", "r" => "2020Q1:2020Q4", "v" => ["2020M1", "2021M1"], "d" => 3,
         "n" => Dict("u" => "5U"))
     @test TOML.parse(sprint(io -> TOML.print(io, w3))) == expected3
+    # MITs inside other values
+    w6 = Workspace(a=Any[2020Q1, 1], h=Dict("m" => 2020Q1, "x" => 1.5), aa=[[2020Q1], [2020Q2]],
+        t=TSeries(1U, [2020Q1, 2020Q2]), s=2020Q1:2:2020Q4, e=MIT{Quarterly}[], f=[1.0, 2.0])
+    expected6 = Dict("a" => Any["2020Q1", 1], "h" => Dict("m" => "2020Q1", "x" => 1.5),
+        "aa" => [["2020Q1"], ["2020Q2"]], "t" => ["2020Q1", "2020Q2"], "s" => ["2020Q1", "2020Q3"],
+        "e" => Any[], "f" => [1.0, 2.0])
+    @test TOML.parse(sprint(io -> TOML.print(io, w6))) == expected6
     # a conversion function does not apply to nested workspaces
     w5 = Workspace(a=1, n=Workspace(s=:hello, m=2020Q1))
     @test TOML.parse(sprint(io -> TOML.print(string, io, w5))) == Dict("a" => 1, "n" => Dict("s" => "hello", "m" => "2020Q1"))

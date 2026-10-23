@@ -337,7 +337,20 @@ end
 _toml(a) = a
 _toml(m::MIT) = string(m)
 _toml(r::AbstractUnitRange{<:MIT}) = string(r)
-_toml(v::AbstractVector{<:MIT}) = string.(v)
+# also inside arrays and dictionaries (a `TSeries` of MITs becomes a vector of strings)
+function _toml(v::AbstractVector)
+    _hasmit(v) || return v
+    out = Any[]   # not a comprehension, which would keep the MIT axes of a `TSeries`
+    for x in v
+        push!(out, _toml(x))
+    end
+    return identity.(out)
+end
+_toml(d::AbstractDict) = _hasmit(d) ? OrderedDict(k => _toml(x) for (k, x) in d) : d
+_hasmit(a) = false
+_hasmit(::MIT) = true
+_hasmit(v::AbstractVector) = any(_hasmit, v)
+_hasmit(d::AbstractDict) = any(_hasmit, values(d))
 _w(a) = a
 _w(w::Workspace) = OrderedDict{Symbol,Any}(k => _toml(v) for (k, v) in w._c)
 # the user's conversion function is for values TOML cannot represent; nested workspaces

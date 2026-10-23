@@ -371,6 +371,9 @@ end
     expected3 = Dict("m" => "2020Q1", "r" => "2020Q1:2020Q4", "v" => ["2020M1", "2021M1"], "d" => 3,
         "n" => Dict("u" => "5U"))
     @test TOML.parse(sprint(io -> TOML.print(io, w3))) == expected3
+    # a conversion function does not apply to nested workspaces
+    w5 = Workspace(a=1, n=Workspace(s=:hello, m=2020Q1))
+    @test TOML.parse(sprint(io -> TOML.print(string, io, w5))) == Dict("a" => 1, "n" => Dict("s" => "hello", "m" => "2020Q1"))
     w4 = Workspace(m=2020Q1, s=:hello)
     @test TOML.parse(sprint(io -> TOML.print(string, io, w4; sorted=true))) == Dict("m" => "2020Q1", "s" => "hello")
 end

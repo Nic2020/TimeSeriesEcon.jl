@@ -340,10 +340,13 @@ _toml(r::AbstractUnitRange{<:MIT}) = string(r)
 _toml(v::AbstractVector{<:MIT}) = string.(v)
 _w(a) = a
 _w(w::Workspace) = OrderedDict{Symbol,Any}(k => _toml(v) for (k, v) in w._c)
+# the user's conversion function is for values TOML cannot represent; nested workspaces
+# are converted here (the printer calls the function for them too)
+_wf(f::Function) = x -> x isa Workspace ? _w(x) : f(x)
 TOML.print(w::Workspace; sorted::Bool=false, by=identity) = TOML.print(_w, _w(w); sorted, by)
 TOML.print(io::IO, w::Workspace; sorted::Bool=false, by=identity) = TOML.print(_w, io, _w(w); sorted, by)
-TOML.print(f::Function, io::IO, w::Workspace; sorted::Bool=false, by=identity) = TOML.print(f ∘ _w, io, _w(w); sorted, by)
-TOML.print(f::Function, w::Workspace; sorted::Bool=false, by=identity) = TOML.print(f ∘ _w, _w(w); sorted, by)
+TOML.print(f::Function, io::IO, w::Workspace; sorted::Bool=false, by=identity) = TOML.print(_wf(f), io, _w(w); sorted, by)
+TOML.print(f::Function, w::Workspace; sorted::Bool=false, by=identity) = TOML.print(_wf(f), _w(w); sorted, by)
 TOML.print(::Nothing, io::IO, w::Workspace; sorted::Bool=false, by=identity) = TOML.print(io, w; sorted, by)
 TOML.print(::Nothing, w::Workspace; sorted::Bool=false, by=identity) = TOML.print(w; sorted, by)
 

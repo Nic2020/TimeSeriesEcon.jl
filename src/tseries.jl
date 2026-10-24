@@ -99,7 +99,7 @@ function cleanedvalues(t::TSeries{BDaily}; skip_all_nans::Bool=false, skip_holid
     elseif skip_all_nans
         return filter(x -> !isnan(x), t.values)
     elseif skip_holidays
-        h_map = TimeSeriesEcon.getoption(:bdaily_holidays_map)
+        h_map = getoption(:bdaily_holidays_map)
         if !(h_map isa TSeries{BDaily})
             throw(ArgumentError("The holidays map stored in :bdaily_holidays_map is not a TSeries it is a $(typeof(h_map)). \n You may need to load one with TimeSeriesEcon.set_holidays_map()."))
         end

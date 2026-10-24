@@ -182,6 +182,13 @@ end
         @test sum(abs, sd.a.values) == 0
         @test_throws DimensionMismatch sd.a[:] = ones(length(sd.a) + 5)
         @test_throws DimensionMismatch sd.a = ones(length(sd.a) + 5)
+        @test_throws DimensionMismatch sd.a = ones(length(sd.a) - 1)
+        @test_throws DimensionMismatch sd.a = 1.0:(length(sd.a)+1)
+        # strided (non-contiguous) column storage
+        sds = MVTSeries(2020Q1, (:a, :b), view(zeros(8, 2), 1:2:8, :))
+        @test_throws DimensionMismatch sds.a = ones(5)
+        sds.a = 1.0:4.0
+        @test sds.a.values == 1.0:4.0
         # access to rows by MIT
         sd[:] = dta[:]
         @test sd[2000Q1] isa Vector{Float64}
@@ -346,6 +353,9 @@ end
     # access with a Bool vectors that are the same length as the axes of A    
     tf = rand(Bool, m)  # for the rows
     tf2 = rand(Bool, n) # for the columns
+    # at least one of each, since the tests below index into the selection
+    tf[rand(1:m)] = true
+    tf2[rand(1:n)] = true
     tstf = TSeries(rangeof(A), tf)
     m1 = sum(tf)
     n1 = sum(tf2)

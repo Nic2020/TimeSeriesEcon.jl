@@ -353,6 +353,9 @@ end
     # access with a Bool vectors that are the same length as the axes of A    
     tf = rand(Bool, m)  # for the rows
     tf2 = rand(Bool, n) # for the columns
+    # at least one of each, since the tests below index into the selection
+    tf[rand(1:m)] = true
+    tf2[rand(1:n)] = true
     tstf = TSeries(rangeof(A), tf)
     m1 = sum(tf)
     n1 = sum(tf2)

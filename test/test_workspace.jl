@@ -378,6 +378,10 @@ end
         "aa" => [["2020Q1"], ["2020Q2"]], "t" => ["2020Q1", "2020Q2"], "s" => ["2020Q1", "2020Q3"],
         "e" => Any[], "f" => [1.0, 2.0])
     @test TOML.parse(sprint(io -> TOML.print(io, w6))) == expected6
+    # an empty range is a string too, with or without other MITs next to it
+    w7 = Workspace(a=Any[2020Q2:2020Q1], b=Any[2020Q2:2020Q1, 2020Q1], h=Dict("r" => 2020Q2:2020Q1))
+    expected7 = Dict("a" => ["2020Q2:2020Q1"], "b" => ["2020Q2:2020Q1", "2020Q1"], "h" => Dict("r" => "2020Q2:2020Q1"))
+    @test TOML.parse(sprint(io -> TOML.print(io, w7))) == expected7
     # a conversion function does not apply to nested workspaces
     w5 = Workspace(a=1, n=Workspace(s=:hello, m=2020Q1))
     @test TOML.parse(sprint(io -> TOML.print(string, io, w5))) == Dict("a" => 1, "n" => Dict("s" => "hello", "m" => "2020Q1"))

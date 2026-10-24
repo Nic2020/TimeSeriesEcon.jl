@@ -349,6 +349,8 @@ end
 _toml(d::AbstractDict) = _hasmit(d) ? OrderedDict(k => _toml(x) for (k, x) in d) : d
 _hasmit(a) = false
 _hasmit(::MIT) = true
+_hasmit(::AbstractUnitRange{<:MIT}) = true   # also when empty
+_hasmit(::AbstractVector{<:AbstractFloat}) = false
 _hasmit(v::AbstractVector) = any(_hasmit, v)
 _hasmit(d::AbstractDict) = any(_hasmit, values(d))
 _w(a) = a
